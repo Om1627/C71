@@ -4,6 +4,7 @@ import { StyleSheet, Text, View,Image,TextInput,TouchableOpacity,textb} from 're
 import {createAppContainer} from 'react-navigation'
 import {createBottomTabNavigator} from 'react-navigation-tabs'
 import {Header} from 'react-native-elements'
+import db from '../config'
 
 export default class WriteStoryScreen extends React.Component{
     constructor(){
@@ -13,6 +14,20 @@ export default class WriteStoryScreen extends React.Component{
             authorName:"",
             Story:""
         }
+    }
+    submitStory=()=>{
+      var storytitle=this.state.storyTitle
+      var authorname=this.state.authorName
+      var story=this.state.Story
+
+var newStory = db.ref('Stories'+'/'+storytitle)
+newStory.update({
+  Title:storytitle,
+  AuthorName:authorname,
+  TheStory:story
+
+})
+
     }
     render(){
       return (
@@ -24,11 +39,11 @@ export default class WriteStoryScreen extends React.Component{
 
           <TextInput placeholder="Story Title" onChangeText={(text)=>{this.setState({storyTitle:text})}} value={this.state.storyTitle} style={styles.inputBox}/>
 
-          <TextInput placeholder="Author Name"  onChangeText={(text)=>{this.setState({authorName:text})}} style={styles.inputBox}/>
+          <TextInput placeholder="Author Name"  onChangeText={(text)=>{this.setState({authorName:text})}} value={this.state.authorName}  style={styles.inputBox}/>
 
-          <TextInput placeholder="Write your story here"  onChangeText={(text)=>{this.setState({Story:text})}} style={styles.StoryBox}/>
+          <TextInput placeholder="Write your story here"  onChangeText={(text)=>{this.setState({Story:text})}} value={this.state.Story} style={styles.StoryBox}/>
 
-          <TouchableOpacity style={styles.goButton}><Text style={styles.buttonText}>SUBMIT</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.goButton} onPress={()=>{this.submitStory()}}><Text style={styles.buttonText}>SUBMIT</Text></TouchableOpacity>
         </View>
       );
     }
